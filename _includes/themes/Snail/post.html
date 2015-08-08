@@ -13,10 +13,17 @@
 			<div class="journal-body">
 				<h1 class="journal-title">{{ page.title }}<span class="author">{% if page.tagline %}{{page.tagline}}{% endif %}</span>
 				</h1>
+				<HR style="border:1 dashed #987cb9" width="80%" color=#987cb9 SIZE=1>
+				<div class="journal-date">发布时间 {{ page.date | date_to_long_string }} </br><span id="busuanzi_container_page_pv">
+  访问次数 <span id="busuanzi_value_page_pv"></span>
+</span>
 				<span class="the-article">
 				{{ content }}
 				</span>
-				<div class="journal-date">Published {{ page.date | date_to_long_string }}</div>
+				<!-- <HR style="border:1 dashed #987cb9" width="80%" color=#987cb9 SIZE=1>
+				<div class="journal-date">Published {{ page.date | date_to_long_string }} </br><span id="busuanzi_container_page_pv">
+  Reviews <span id="busuanzi_value_page_pv"></span>
+</span> -->
 				<div class="journal-tags">
 				{% assign tags_list = page.tags %}
 				{% include themes/Snail/tags_list %}
