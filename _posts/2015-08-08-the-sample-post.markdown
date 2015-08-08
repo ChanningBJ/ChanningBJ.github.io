@@ -56,3 +56,16 @@ date: "2015-08-08"
 |:-----------|:---|:---|
 | dd         | dd | dd |
 | dd         | dd | dd |
+
+# 添加页面访问量
+
+使用了[不蒜子](http://ibruce.info/2015/04/04/busuanzi/)的页面访问统计工具。
+首先在 `_includes/themes/Snail/default.html` 添加
+
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+然后在 `_includes/themes/Snail/post.html` 模版中自己需要的位置添加上显示访问统计的脚本，例如：
+
+    <HR style="border:1 dashed #987cb9" width="80%" color=#987cb9 SIZE=1>
+	  <div class="journal-date">发布时间 {{ page.date | date_to_long_string }} </br>
+    <span id="busuanzi_container_page_pv">访问次数 <span id="busuanzi_value_page_pv"></span></span>

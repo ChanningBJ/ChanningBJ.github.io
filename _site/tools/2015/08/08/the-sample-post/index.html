@@ -225,6 +225,21 @@ th {border: 1px solid black;
   </tbody>
 </table>
 
+<h1 id="section-1">添加页面访问量</h1>
+
+<p>使用了<a href="http://ibruce.info/2015/04/04/busuanzi/">不蒜子</a>的页面访问统计工具。
+首先在 <code>_includes/themes/Snail/default.html</code> 添加</p>
+
+<pre><code>&lt;script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"&gt;&lt;/script&gt;
+</code></pre>
+
+<p>然后在 <code>_includes/themes/Snail/post.html</code> 模版中自己需要的位置添加上显示访问统计的脚本，例如：</p>
+
+<pre><code>&lt;HR style="border:1 dashed #987cb9" width="80%" color=#987cb9 SIZE=1&gt;
+  &lt;div class="journal-date"&gt;发布时间 08 August 2015 &lt;/br&gt;
+&lt;span id="busuanzi_container_page_pv"&gt;访问次数 &lt;span id="busuanzi_value_page_pv"&gt;&lt;/span&gt;&lt;/span&gt;
+</code></pre>
+
 				</span>
 				<!-- <HR style="border:1 dashed #987cb9" width="80%" color=#987cb9 SIZE=1>
 				<div class="journal-date">Published 08 August 2015 </br><span id="busuanzi_container_page_pv">

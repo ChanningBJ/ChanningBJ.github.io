@@ -5,8 +5,8 @@
         <description>Channing's Blog - Channing Wang</description>
         <link>http://channingbj.github.io/</link>
         <link>http://channingbj.github.io/</link>
-        <lastBuildDate>2015-08-08T21:55:53+08:00</lastBuildDate>
-        <pubDate>2015-08-08T21:55:53+08:00</pubDate>
+        <lastBuildDate>2015-08-08T22:06:17+08:00</lastBuildDate>
+        <pubDate>2015-08-08T22:06:17+08:00</pubDate>
         <ttl>1800</ttl>
 
 
@@ -80,6 +80,21 @@ th {border: 1px solid black;
     &lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;
+
+&lt;h1 id=&quot;section-1&quot;&gt;添加页面访问量&lt;/h1&gt;
+
+&lt;p&gt;使用了&lt;a href=&quot;http://ibruce.info/2015/04/04/busuanzi/&quot;&gt;不蒜子&lt;/a&gt;的页面访问统计工具。
+首先在 &lt;code&gt;_includes/themes/Snail/default.html&lt;/code&gt; 添加&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;script async src=&quot;https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后在 &lt;code&gt;_includes/themes/Snail/post.html&lt;/code&gt; 模版中自己需要的位置添加上显示访问统计的脚本，例如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;HR style=&quot;border:1 dashed #987cb9&quot; width=&quot;80%&quot; color=#987cb9 SIZE=1&amp;gt;
+  &amp;lt;div class=&quot;journal-date&quot;&amp;gt;发布时间 08 August 2015 &amp;lt;/br&amp;gt;
+&amp;lt;span id=&quot;busuanzi_container_page_pv&quot;&amp;gt;访问次数 &amp;lt;span id=&quot;busuanzi_value_page_pv&quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/span&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
 </description>
                 <link>http://channingbj.github.io//tools/2015/08/08/the-sample-post</link>
                 <guid>http://channingbj.github.io//tools/2015/08/08/the-sample-post</guid>
