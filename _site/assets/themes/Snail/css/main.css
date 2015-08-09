@@ -355,10 +355,10 @@ nav #nav-c ul#nav-list li#home a {
 	overflow:hidden;
 	display:block;
 	position:relative;
-	background: url("../img/avatar.jpg");
+	background: url("https://avatars0.githubusercontent.com/u/46239?v=3&s=460");
 	padding:0;
 	background-size: 100% 100%;
-	border-radius: 50%;  
+	border-radius: 50%;
 	/* box-shadow: 0 0 0px 1px black, 0 0 4px 4px #5C5C5C; */
 	border-style: solid;
 	border-color: rgb(0, 0, 0);
@@ -1167,7 +1167,7 @@ textarea.styletext:focus {
 .full-avatar {
 	width:100px;
 	height:100px;
-	background:url("../img/avatar.png");
+	background:url("https://avatars0.githubusercontent.com/u/46239?v=3&s=460");
 	padding:6px;
 	text-align:center;
 	line-height:100px;
@@ -1368,7 +1368,7 @@ table {
     border-spacing:0;
     border:1px solid black;
 }
- 
+
 td {
     text-align:left;
     font-weight:normal;
@@ -1376,6 +1376,6 @@ td {
     border:1px solid black;
     padding:5px;
 }
- 
+
 th {border: 1px solid black;
     padding:5px;}

@@ -232,7 +232,7 @@
 	width:60px;
 	height:60px;
 	padding:4px;
-	background:url("../../img/small-avatar.png");
+	background:url("assets/themes/Snail/css/pages/journal.css");
 }
 .journal-arrow {
 	width:26px;
@@ -355,7 +355,7 @@ img.cat-image {
 	width:60px;
 	height:60px;
 	padding:4px;
-	background:url("../../img/medium-avatar.png");
+	background:url("assets/themes/Snail/css/pages/journal.css");
 	margin:15px 0 0 10px;
 }
 h3#no-articles {
