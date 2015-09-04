@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	
-	<title>Tags</title>
+	<title>gitlab与jenkins协同工作</title>
     
 	
 	<meta name="author" content="Channing Wang">
@@ -104,11 +104,7 @@
 				
 				  
 					
-					<li  id = "Tags" class="active">
-					<span class="nav-l-active"></span>
-					<a href="/tags.html" class="active">Tags</a>
-					<span class="nav-r-active"></span>
-					</li>
+					<li id = "Tags"><a href="/tags.html">Tags</a></li>
 					
 				  
 				
@@ -134,32 +130,135 @@
 </nav>
 			<div id="page-content">
 				
-<div class="page-title-inline">
-	<h1>Tags 
+<div id="page-content">
+	<div class="cont932">
+	<div id="journal-articles-block">
+		<div class="journal-article">
+			<div class="journal-post-info">
+				<div class="journal-cat-box">
+				
+				
+				<div class="journal-cat-box">
+
+<a href="/categories.html#cicd-ref" title="cicd">
+	cicd
+
+</a>
 </div>
-<div class="cont932">
-	<hr style="margin-top: 0;">
-	<div class="contentarea">
-		<div class="ca-center ca-center20t nobg">
-			<div class="journal-tags" id="teaminfo">
-			  
-			  
+				
+				</div>
+			</div>
+			<div class="journal-body">
+				<h1 class="journal-title">gitlab与jenkins协同工作<span class="author"></span>
+				</h1>
+				<HR style="border:1 dashed #987cb9" width="80%" color=#987cb9 SIZE=1>
+				<div class="journal-date">发布时间 15 August 2015 </br><span id="busuanzi_container_page_pv">
+  访问次数 <span id="busuanzi_value_page_pv"></span>
+</span>
+				<span class="the-article">
+				<p>介绍如何在配置gitlab在commit以后自动触发jenkins job进行build，并且在成功后添加git tag</p>
+
+<!--more-->
+
+<h1 id="gitlab-push--jenkins-job">gitlab push 触发 Jenkins Job</h1>
+
+<p>配置后的效果：</p>
+
+<ul>
+  <li>向分支push后自动触发jenkins job</li>
+  <li>jenkins job 成功执行后为当前的commit添加一个标签，方便以后进行线上回滚</li>
+</ul>
+
+<p>需要安装的插件：</p>
+
+<ul>
+  <li>Gitlab Hook Plugin</li>
+  <li>GitLab Plugin</li>
+</ul>
+
+<h2 id="jenkins-job-">Jenkins Job 的设置</h2>
+
+<h3 id="section">设置源代码仓库</h3>
+
+<p>首先在Jenkins创建一个job，在“源码管理”中指定git并设置URL。
+在 Branch Specifier 中填写 <code>*/dev*</code> 表示只有dev开头的分支有push操作的时候才会触发这个job。
+<img src="/pic/2015-09-04T08:15:15.864Z.png" alt="" />
+设置中的“Repository URL”是gitlab中SSH方式的URL，如下：
+<img src="/pic/2015-08-15T07:55:12.689Z.png" alt="" /></p>
+
+<p>设置触发器：
+<img src="/pic/2015-09-04T08:18:28.742Z.png" alt="" />
+这里 Build when a change is pushed to GitLab. GitLab CI Service URL 的值后面需要填写到gitlab的push hook中</p>
+
+<p>在“Credentials”中添加一个用户的认证方式，这里我们选择ssh key的方式：
+<img src="/pic/2015-08-15T07:57:23.624Z.png" alt="" /></p>
+
+<h3 id="buildgitlab">配置build成功以后在gitlab上打标签</h3>
+
+<p>首先在源代码管理中为这个仓库起一个名字：
+<img src="/pic/2015-08-15T08:05:49.934Z.png" alt="" />
+创建一个构建后的操作“GIT Publisher”, 在 Target remote name 中填写仓库的名字。TAG的名称可以引用Jenkins的环境变量，如 B$BUILD_NUMBER
+<img src="/pic/2015-08-15T08:04:23.731Z.png" alt="" /></p>
+
+<h2 id="gitlab-">GitLab 设置</h2>
+
+<h3 id="jeknins">设置jeknins用户的权限</h3>
+<p>在gitlab项目中，将jenkins的公钥添加到当前项目master用户中。如果不需要构建成功后打标签的话可以在deploy key 中添加jenkins的公钥。
+<img src="/pic/2015-08-15T08:11:58.573Z.png" alt="" /></p>
+
+<p>jenkins在给git分支打标签的时候会进行push操作，而deploy key只有可读的权限。</p>
+
+<h3 id="push-hook">设置push hook</h3>
+
+<p><img src="/pic/2015-09-04T08:21:04.153Z.png" alt="" /></p>
+
+<p>在这里添加一个push的webhook，URL为jenkins job触发器配置中 <code>Build when a change is pushed to GitLab. GitLab CI Service URL</code> 对应的值</p>
+
+				</span>
+				<!-- <HR style="border:1 dashed #987cb9" width="80%" color=#987cb9 SIZE=1>
+				<div class="journal-date">Published 15 August 2015 </br><span id="busuanzi_container_page_pv">
+  Reviews <span id="busuanzi_value_page_pv"></span>
+</span> -->
+				<div class="journal-tags">
+				
+				
 	
 
 
 
+				</div>
 			</div>
-			<div class="clearboth"></div>
-			<hr>
-			<div>
-			
-			</div>
-			<div class="clearboth"></div>
 		</div>
+		<div class="clearboth"></div>
 	</div>
+</div>
+	<div class="clearboth"></div>
+	
+
+
+  <!-- 多说评论框 start -->
+<div id="comments">
+    <div class="ds-thread" data-thread-key="/cicd/2015/08/15/gitlab-jenkins"  data-title="gitlab与jenkins协同工作 - Channing's Blog"></div>
+</div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"simpleyyt"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+
+
 	<div class="clearboth"></div>
 </div>
-<div class="clearboth"></div>
 
 
 			</div>
@@ -259,7 +358,7 @@
     
       
       	
-      	<li class="active"><a href="/tags.html" class="active">Tags</a></li>
+      	<li><a href="/tags.html">Tags</a></li>
       	
       
     

@@ -10,4 +10,6 @@ http://channingbj.github.io//search.html
 http://channingbj.github.io//sitemap.txt
 http://channingbj.github.io//tags.html
 
+http://channingbj.github.io//java/2015/09/04/usemybits
+http://channingbj.github.io//cicd/2015/08/15/gitlab-jenkins
 http://channingbj.github.io//tools/2015/08/08/the-sample-post

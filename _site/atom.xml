@@ -4,13 +4,162 @@
  <title>Channing's Blog</title>
  <link href="http://channingbj.github.io//" rel="self"/>
  <link href="http://channingbj.github.io/"/>
- <updated>2015-08-09T17:06:36+08:00</updated>
+ <updated>2015-09-04T16:24:34+08:00</updated>
  <id>http://channingbj.github.io/</id>
  <author>
    <name>Channing Wang</name>
    <email></email>
  </author>
 
+ 
+ <entry>
+   <title>MyBatis 基本用法</title>
+   <link href="http://channingbj.github.io//java/2015/09/04/usemybits"/>
+   <updated>2015-09-04T00:00:00+08:00</updated>
+   <id>http://channingbj.github.io//java/2015/09/04/usemybits</id>
+   <content type="html">&lt;!--more--&gt;
+
+&lt;h1 id=&quot;mapping&quot;&gt;定义mapping类&lt;/h1&gt;
+
+&lt;p&gt;MyBatis 有两种定义查询结果到 Java 类的映射关系的方式，一种是通过xml文件定义，一种是通过Java annonation 定义，这里使用第二种方法。
+现在我们有一张mysql的表定义如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;CREATE TABLE `MY_BATIS_TEST` (
+  `id` varchar(255) NOT NULL DEFAULT &#39;&#39;,
+  `url` varchar(255) DEFAULT NULL
+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;首先定义table一条数据在Java中对应的class&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;public class Redord {
+    public String url;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;定义sql查询到Java class 结果集合的映射：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;public interface SimpleMapper {
+
+    @Select(&quot;select url from testdb.MY_BATIS_TEST limit 1;&quot;)
+    Redord selectOneRecord();
+
+    @Select(&quot;select url from testdb.MY_BATIS_TEST;&quot;)
+    Set&amp;lt;Record&amp;gt; selectRecords();
+
+    @Select(&quot;select url from testdb.MY_BATIS_TEST where id=#{id};&quot;)
+    Record selectRecordByID(int id);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&quot;mapping-1&quot;&gt;初始化并注册mapping类&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;Properties properties = new Properties();
+properties.setProperty(&quot;driver&quot;, &quot;com.mysql.jdbc.Driver&quot;);
+properties.setProperty(&quot;url&quot;, &quot;jdbc:mysql://127.0.0.1:3306/testdb&quot;);
+properties.setProperty(&quot;username&quot;, &quot;the_user_name&quot;);
+properties.setProperty(&quot;password&quot;, &quot;the_password&quot;);
+PooledDataSourceFactory pooledDataSourceFactory = new PooledDataSourceFactory();
+pooledDataSourceFactory.setProperties(properties);
+DataSource dataSource = pooledDataSourceFactory.getDataSource();
+Environment environment = new Environment(&quot;development&quot;, new JdbcTransactionFactory(), dataSource);
+
+Configuration configuration = new Configuration(environment);
+configuration.addMapper(SimpleMapper.class); //注册mapping类
+
+SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(configuration);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&quot;mysql&quot;&gt;从mysql中查询数据&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;SqlSession session = sqlSessionFactory.openSession();
+try{
+    PluginMapper mapper = session.getMapper(PluginMapper.class);
+    Plugin pl = mapper.selectPluginsByID(1000);
+    System.out.println(pl.url);
+} finally {
+    session.close();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&quot;section&quot;&gt;全局唯一以及线程安全&lt;/h1&gt;
+
+&lt;p&gt;SqlSessionFactory 可以在整个app的生命周期中只创建一次，SqlSession需要在每次执行sql的函数中创建一次并且使用后需要进行关闭：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;SqlSession session = sqlSessionFactory.openSession();
+try {
+  // do work
+} finally {
+  session.close();
+}
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>gitlab与jenkins协同工作</title>
+   <link href="http://channingbj.github.io//cicd/2015/08/15/gitlab-jenkins"/>
+   <updated>2015-08-15T00:00:00+08:00</updated>
+   <id>http://channingbj.github.io//cicd/2015/08/15/gitlab-jenkins</id>
+   <content type="html">&lt;p&gt;介绍如何在配置gitlab在commit以后自动触发jenkins job进行build，并且在成功后添加git tag&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;h1 id=&quot;gitlab-push--jenkins-job&quot;&gt;gitlab push 触发 Jenkins Job&lt;/h1&gt;
+
+&lt;p&gt;配置后的效果：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;向分支push后自动触发jenkins job&lt;/li&gt;
+  &lt;li&gt;jenkins job 成功执行后为当前的commit添加一个标签，方便以后进行线上回滚&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;需要安装的插件：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Gitlab Hook Plugin&lt;/li&gt;
+  &lt;li&gt;GitLab Plugin&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;jenkins-job-&quot;&gt;Jenkins Job 的设置&lt;/h2&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;设置源代码仓库&lt;/h3&gt;
+
+&lt;p&gt;首先在Jenkins创建一个job，在“源码管理”中指定git并设置URL。
+在 Branch Specifier 中填写 &lt;code&gt;*/dev*&lt;/code&gt; 表示只有dev开头的分支有push操作的时候才会触发这个job。
+&lt;img src=&quot;/pic/2015-09-04T08:15:15.864Z.png&quot; alt=&quot;&quot; /&gt;
+设置中的“Repository URL”是gitlab中SSH方式的URL，如下：
+&lt;img src=&quot;/pic/2015-08-15T07:55:12.689Z.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;设置触发器：
+&lt;img src=&quot;/pic/2015-09-04T08:18:28.742Z.png&quot; alt=&quot;&quot; /&gt;
+这里 Build when a change is pushed to GitLab. GitLab CI Service URL 的值后面需要填写到gitlab的push hook中&lt;/p&gt;
+
+&lt;p&gt;在“Credentials”中添加一个用户的认证方式，这里我们选择ssh key的方式：
+&lt;img src=&quot;/pic/2015-08-15T07:57:23.624Z.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;buildgitlab&quot;&gt;配置build成功以后在gitlab上打标签&lt;/h3&gt;
+
+&lt;p&gt;首先在源代码管理中为这个仓库起一个名字：
+&lt;img src=&quot;/pic/2015-08-15T08:05:49.934Z.png&quot; alt=&quot;&quot; /&gt;
+创建一个构建后的操作“GIT Publisher”, 在 Target remote name 中填写仓库的名字。TAG的名称可以引用Jenkins的环境变量，如 B$BUILD_NUMBER
+&lt;img src=&quot;/pic/2015-08-15T08:04:23.731Z.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;gitlab-&quot;&gt;GitLab 设置&lt;/h2&gt;
+
+&lt;h3 id=&quot;jeknins&quot;&gt;设置jeknins用户的权限&lt;/h3&gt;
+&lt;p&gt;在gitlab项目中，将jenkins的公钥添加到当前项目master用户中。如果不需要构建成功后打标签的话可以在deploy key 中添加jenkins的公钥。
+&lt;img src=&quot;/pic/2015-08-15T08:11:58.573Z.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;jenkins在给git分支打标签的时候会进行push操作，而deploy key只有可读的权限。&lt;/p&gt;
+
+&lt;h3 id=&quot;push-hook&quot;&gt;设置push hook&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;/pic/2015-09-04T08:21:04.153Z.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;在这里添加一个push的webhook，URL为jenkins job触发器配置中 &lt;code&gt;Build when a change is pushed to GitLab. GitLab CI Service URL&lt;/code&gt; 对应的值&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>开始使用 Jeckll 写博客</title>

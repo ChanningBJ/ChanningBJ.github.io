@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	
-	<title>Tags</title>
+	<title>MyBatis 基本用法</title>
     
 	
 	<meta name="author" content="Channing Wang">
@@ -104,11 +104,7 @@
 				
 				  
 					
-					<li  id = "Tags" class="active">
-					<span class="nav-l-active"></span>
-					<a href="/tags.html" class="active">Tags</a>
-					<span class="nav-r-active"></span>
-					</li>
+					<li id = "Tags"><a href="/tags.html">Tags</a></li>
 					
 				  
 				
@@ -134,32 +130,154 @@
 </nav>
 			<div id="page-content">
 				
-<div class="page-title-inline">
-	<h1>Tags 
+<div id="page-content">
+	<div class="cont932">
+	<div id="journal-articles-block">
+		<div class="journal-article">
+			<div class="journal-post-info">
+				<div class="journal-cat-box">
+				
+				
+				<div class="journal-cat-box">
+
+<a href="/categories.html#java-ref" title="java">
+	java
+
+</a>
 </div>
-<div class="cont932">
-	<hr style="margin-top: 0;">
-	<div class="contentarea">
-		<div class="ca-center ca-center20t nobg">
-			<div class="journal-tags" id="teaminfo">
-			  
-			  
+				
+				</div>
+			</div>
+			<div class="journal-body">
+				<h1 class="journal-title">MyBatis 基本用法<span class="author"></span>
+				</h1>
+				<HR style="border:1 dashed #987cb9" width="80%" color=#987cb9 SIZE=1>
+				<div class="journal-date">发布时间 04 September 2015 </br><span id="busuanzi_container_page_pv">
+  访问次数 <span id="busuanzi_value_page_pv"></span>
+</span>
+				<span class="the-article">
+				<!--more-->
+
+<h1 id="mapping">定义mapping类</h1>
+
+<p>MyBatis 有两种定义查询结果到 Java 类的映射关系的方式，一种是通过xml文件定义，一种是通过Java annonation 定义，这里使用第二种方法。
+现在我们有一张mysql的表定义如下：</p>
+
+<pre><code>CREATE TABLE `MY_BATIS_TEST` (
+  `id` varchar(255) NOT NULL DEFAULT '',
+  `url` varchar(255) DEFAULT NULL
+)
+</code></pre>
+
+<p>首先定义table一条数据在Java中对应的class</p>
+
+<pre><code>public class Redord {
+    public String url;
+}
+</code></pre>
+
+<p>定义sql查询到Java class 结果集合的映射：</p>
+
+<pre><code>public interface SimpleMapper {
+
+    @Select("select url from testdb.MY_BATIS_TEST limit 1;")
+    Redord selectOneRecord();
+
+    @Select("select url from testdb.MY_BATIS_TEST;")
+    Set&lt;Record&gt; selectRecords();
+
+    @Select("select url from testdb.MY_BATIS_TEST where id=#{id};")
+    Record selectRecordByID(int id);
+}
+</code></pre>
+
+<h1 id="mapping-1">初始化并注册mapping类</h1>
+
+<pre><code>Properties properties = new Properties();
+properties.setProperty("driver", "com.mysql.jdbc.Driver");
+properties.setProperty("url", "jdbc:mysql://127.0.0.1:3306/testdb");
+properties.setProperty("username", "the_user_name");
+properties.setProperty("password", "the_password");
+PooledDataSourceFactory pooledDataSourceFactory = new PooledDataSourceFactory();
+pooledDataSourceFactory.setProperties(properties);
+DataSource dataSource = pooledDataSourceFactory.getDataSource();
+Environment environment = new Environment("development", new JdbcTransactionFactory(), dataSource);
+
+Configuration configuration = new Configuration(environment);
+configuration.addMapper(SimpleMapper.class); //注册mapping类
+
+SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(configuration);
+</code></pre>
+
+<h1 id="mysql">从mysql中查询数据</h1>
+
+<pre><code>SqlSession session = sqlSessionFactory.openSession();
+try{
+    PluginMapper mapper = session.getMapper(PluginMapper.class);
+    Plugin pl = mapper.selectPluginsByID(1000);
+    System.out.println(pl.url);
+} finally {
+    session.close();
+}
+</code></pre>
+
+<h1 id="section">全局唯一以及线程安全</h1>
+
+<p>SqlSessionFactory 可以在整个app的生命周期中只创建一次，SqlSession需要在每次执行sql的函数中创建一次并且使用后需要进行关闭：</p>
+
+<pre><code>SqlSession session = sqlSessionFactory.openSession();
+try {
+  // do work
+} finally {
+  session.close();
+}
+</code></pre>
+
+				</span>
+				<!-- <HR style="border:1 dashed #987cb9" width="80%" color=#987cb9 SIZE=1>
+				<div class="journal-date">Published 04 September 2015 </br><span id="busuanzi_container_page_pv">
+  Reviews <span id="busuanzi_value_page_pv"></span>
+</span> -->
+				<div class="journal-tags">
+				
+				
 	
 
 
 
+				</div>
 			</div>
-			<div class="clearboth"></div>
-			<hr>
-			<div>
-			
-			</div>
-			<div class="clearboth"></div>
 		</div>
+		<div class="clearboth"></div>
 	</div>
+</div>
+	<div class="clearboth"></div>
+	
+
+
+  <!-- 多说评论框 start -->
+<div id="comments">
+    <div class="ds-thread" data-thread-key="/java/2015/09/04/usemybits"  data-title="MyBatis 基本用法 - Channing's Blog"></div>
+</div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"simpleyyt"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+
+
 	<div class="clearboth"></div>
 </div>
-<div class="clearboth"></div>
 
 
 			</div>
@@ -259,7 +377,7 @@
     
       
       	
-      	<li class="active"><a href="/tags.html" class="active">Tags</a></li>
+      	<li><a href="/tags.html">Tags</a></li>
       	
       
     
