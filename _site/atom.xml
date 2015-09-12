@@ -4,13 +4,105 @@
  <title>Channing's Blog</title>
  <link href="http://channingbj.github.io//" rel="self"/>
  <link href="http://channingbj.github.io/"/>
- <updated>2015-09-04T16:24:34+08:00</updated>
+ <updated>2015-09-12T17:14:50+08:00</updated>
  <id>http://channingbj.github.io/</id>
  <author>
    <name>Channing Wang</name>
    <email></email>
  </author>
 
+ 
+ <entry>
+   <title>MyBatis 使用annonation定义类型映射</title>
+   <link href="http://channingbj.github.io//java/2015/09/12/mybatis-annonation"/>
+   <updated>2015-09-12T00:00:00+08:00</updated>
+   <id>http://channingbj.github.io//java/2015/09/12/mybatis-annonation</id>
+   <content type="html">&lt;p&gt;介绍如何使用annonation的方式定义数据库字段到Java成员变量直接的映射关系，以及定义数据库表中的类型到Java类型的自定义转换&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;关于如何配置MyBatis进行Java对象和Mysql表之间的映射可以参照 &lt;a href=&quot;http://channingbj.github.io/java/2015/09/04/usemybits/&quot;&gt;这片文章&lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;下面是一个最基础的映射关系配置：
+    public interface SimpleMapper {
+        @Select(“select url from testdb.MY_BATIS_TEST;”)
+        Set&lt;record&gt; selectRecords();
+    }
+在默认的配置中，mysqk表的字段会映射到同名字的java成员变量，这里我们看如何设置映射到其他的变量，以及如何进行类型转换&lt;/record&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;section&quot;&gt;自定义映射关系&lt;/h1&gt;
+
+&lt;p&gt;如果我们的DB中的一列名称是support_os_version类型是VARCHAR，但是在Java代码中对应的变量是 &lt;code&gt;String supportOSLevel&lt;/code&gt;，可以进行如下定义：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;public interface SimpleMapper {
+    @Select(&quot;select url from testdb.MY_BATIS_TEST;&quot;)
+    @Results(value = {
+            @Result(property = &quot;support_os_version&quot;, column = &quot;supportOSLevel&quot;),
+    })
+    Set&amp;lt;Record&amp;gt; selectRecords();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&quot;section-1&quot;&gt;定义类型映射&lt;/h1&gt;
+
+&lt;p&gt;如果我们的support_os_version列是一个使用逗号分割的版本号里表，
+在Java中我们想映射到 &lt;code&gt;String[] supportOSLevel&lt;/code&gt;, 可以通过定义 typeHandler 的方式进行映射。&lt;/p&gt;
+
+&lt;p&gt;首先定义一个从String到String[]的转换类：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;public class StringSplitHandler extends BaseTypeHandler&amp;lt;String[]&amp;gt; {
+
+    private static final Joiner joiner = Joiner.on(&quot;,&quot;);
+
+    @Override
+    public void setNonNullParameter(PreparedStatement preparedStatement, int i, String[] strings, JdbcType jdbcType) throws SQLException {
+        preparedStatement.setString(i, joiner.join(strings));
+    }
+
+    @Override
+    public String[] getNullableResult(ResultSet resultSet, String columnName) throws SQLException {
+        String data = resultSet.getString(columnName);
+        if(StringUtils.isEmpty(data)) {
+            return new String[0];
+        } else {
+            return data.split(&quot;,&quot;);
+        }
+    }
+
+    @Override
+    public String[] getNullableResult(ResultSet resultSet, int columnIndex) throws SQLException {
+        String data = resultSet.getString(columnIndex);
+        if(StringUtils.isEmpty(data)) {
+            return new String[0];
+        } else {
+            return data.split(&quot;,&quot;);
+        }
+    }
+
+    @Override
+    public String[] getNullableResult(CallableStatement callableStatement, int columnIndex) throws SQLException {
+        String data = callableStatement.getString(columnIndex);
+        if(StringUtils.isEmpty(data)) {
+            return new String[0];
+        } else {
+            return data.split(&quot;,&quot;);
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后在映射关系的定义中指定这个类作为typeHandler&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;public interface SimpleMapper {
+    @Select(&quot;select url from testdb.MY_BATIS_TEST;&quot;)
+    @Results(value = {
+            @Result(property = &quot;support_os_version&quot;, column = &quot;supportOSLevel&quot;, typeHandler = StringSplitHandler.class),
+    })
+    Set&amp;lt;Record&amp;gt; selectRecords();
+}
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+ </entry>
  
  <entry>
    <title>MyBatis 基本用法</title>
