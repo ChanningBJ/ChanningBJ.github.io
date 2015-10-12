@@ -134,8 +134,6 @@ date: "2015-10-12"
 在这个pom文件中，我们首先定义了三个profile，dev profile 中将 build.profile.id 的值设置为 dev，beijing profile 中将 build.profile.id 的值设置为 beijing，shanghai profile 中将 build.profile.id 的值设置为 shanghai。
 同时，这个配置中还指定了资源文件的位置是 src/main/resources/， 在生成这些资源文件的时候使用 profiles/${build.profile.id}_config.properties 中定义的变量进行内容的替换。
 
-
-
 在打包的时候，如果我们执行：`mvn package -D beijing` ， 这时首先会找到beijing的profile，将build.profile.id赋值为beijing，
 这样定义变量的文件名就变成了 profiles/beijing_config.properties， 将config.properties 打入war包的时候会从 profiles/beijing_config.properties 中读取 `${mysql.host}` 和 `${mysql.port}` 的值。最后war包中的 config.properties
 就变成了：

@@ -4,7 +4,7 @@
  <title>Channing's Blog</title>
  <link href="http://channingbj.github.io//" rel="self"/>
  <link href="http://channingbj.github.io/"/>
- <updated>2015-10-13T00:06:05+08:00</updated>
+ <updated>2015-10-13T00:08:43+08:00</updated>
  <id>http://channingbj.github.io/</id>
  <author>
    <name>Channing Wang</name>
@@ -395,6 +395,41 @@ try {
 &lt;p&gt;&lt;img src=&quot;/pic/2015-09-04T08:21:04.153Z.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;在这里添加一个push的webhook，URL为jenkins job触发器配置中 &lt;code&gt;Build when a change is pushed to GitLab. GitLab CI Service URL&lt;/code&gt; 对应的值&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>搭建自己的pip server</title>
+   <link href="http://channingbj.github.io//python/2015/08/09/homemadepipserver"/>
+   <updated>2015-08-09T00:00:00+08:00</updated>
+   <id>http://channingbj.github.io//python/2015/08/09/homemadepipserver</id>
+   <content type="html">&lt;!--more--&gt;
+
+&lt;h2 id=&quot;step1-set-up-the-directories&quot;&gt;step1: set up the directories&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;mkdir -p ~/pypi/packages
+cd ~/pypi
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;step2-set-up-the-virtualenv-and-activate-it&quot;&gt;step2: set up the virtualenv and activate it&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;virtualenv venv
+. ./venv/bin/activate
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;step3-install-and-start-payload-service&quot;&gt;step3: install and start payload service&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;pip install pypiserver
+pypi-server -p xxx ~/pypi/packages
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;step4-&quot;&gt;step4: 发布软件包&lt;/h2&gt;
+&lt;p&gt;安装之后需要把软件源码打包成tar.gz并且按照下面的这个方式命名：  pacakgename-version.tar.gz (例如 nginxparser-1.0.tar.gz) ，然后复制到目录 ~/pypi/packages&lt;/p&gt;
+
+&lt;h2 id=&quot;step5-pip&quot;&gt;step5: 最后，使用pip就可以安装了：&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo pip install -i http://xxxxxxxx/simple/ nginxparser
+&lt;/code&gt;&lt;/pre&gt;
 </content>
  </entry>
  

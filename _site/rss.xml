@@ -5,8 +5,8 @@
         <description>Channing's Blog - Channing Wang</description>
         <link>http://channingbj.github.io/</link>
         <link>http://channingbj.github.io/</link>
-        <lastBuildDate>2015-10-13T00:06:05+08:00</lastBuildDate>
-        <pubDate>2015-10-13T00:06:05+08:00</pubDate>
+        <lastBuildDate>2015-10-13T00:08:43+08:00</lastBuildDate>
+        <pubDate>2015-10-13T00:08:43+08:00</pubDate>
         <ttl>1800</ttl>
 
 
@@ -394,6 +394,41 @@ try {
                 <link>http://channingbj.github.io//cicd/2015/08/15/gitlab-jenkins</link>
                 <guid>http://channingbj.github.io//cicd/2015/08/15/gitlab-jenkins</guid>
                 <pubDate>2015-08-15T00:00:00+08:00</pubDate>
+        </item>
+
+        <item>
+                <title>搭建自己的pip server</title>
+                <description>&lt;!--more--&gt;
+
+&lt;h2 id=&quot;step1-set-up-the-directories&quot;&gt;step1: set up the directories&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;mkdir -p ~/pypi/packages
+cd ~/pypi
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;step2-set-up-the-virtualenv-and-activate-it&quot;&gt;step2: set up the virtualenv and activate it&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;virtualenv venv
+. ./venv/bin/activate
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;step3-install-and-start-payload-service&quot;&gt;step3: install and start payload service&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;pip install pypiserver
+pypi-server -p xxx ~/pypi/packages
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;step4-&quot;&gt;step4: 发布软件包&lt;/h2&gt;
+&lt;p&gt;安装之后需要把软件源码打包成tar.gz并且按照下面的这个方式命名：  pacakgename-version.tar.gz (例如 nginxparser-1.0.tar.gz) ，然后复制到目录 ~/pypi/packages&lt;/p&gt;
+
+&lt;h2 id=&quot;step5-pip&quot;&gt;step5: 最后，使用pip就可以安装了：&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo pip install -i http://xxxxxxxx/simple/ nginxparser
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+                <link>http://channingbj.github.io//python/2015/08/09/homemadepipserver</link>
+                <guid>http://channingbj.github.io//python/2015/08/09/homemadepipserver</guid>
+                <pubDate>2015-08-09T00:00:00+08:00</pubDate>
         </item>
 
         <item>
